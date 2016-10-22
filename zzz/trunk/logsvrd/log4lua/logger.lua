@@ -166,6 +166,20 @@ function _module.loadConfig(fileName)
     end
 end
 
+function _module.loadCategory(category,fileobj)
+    if (not category) or (not fileobj) then
+        _loggers = {}
+        _loggers["ROOT"] = Logger.new(console.new(), "ROOT", _module.INFO)
+        _module.getLogger("ROOT"):info("No logging configuration found in file '" .. fileName .. "' (Error: " .. tostring(errorMsg) .. "). Using default (INFO to console).",nil,"chinaness")
+    else
+		-- Default configuration if no config file has been specified or it could not be loaded.
+		if _loggers == nil then
+            _loggers = {}
+        end
+        _loggers[category] = fileobj
+    end
+end
+
 --- Constructor.
 -- @param appenders a single function or a table of functions taking a string as parameter that is responsible for writing the log message.
 -- @param category the category (== name) of this logger

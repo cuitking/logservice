@@ -23,7 +23,7 @@ function Logsvrcmd.start(conf)
 	msghelper:set_idle_logger_pool(logscfg)
 
 	msghelper:loadloggercfg(logscfg)
-
+	filelog.sys_error("-----logsvrcmd.start over !!!!!!1")
 	skynet.retpack(true)
 end
 return Logsvrcmd
