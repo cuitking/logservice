@@ -3,13 +3,15 @@
 logrootpath ="../../../logs"
 logscfg = {
 	moneylogcfg = {
-		moneylogpath = logrootpath .. "/money",
-		splitfilesize = 4096,
+		logsname = "money",
+		logspath = logrootpath .. "/money",
+		splitfilesize = 40960,
 	},
 	
 	recordlogcfg = {
-		recordlogpath = logrootpath .. "/record",
-		splitfilesize = 4096,
+		logsname = "record",
+		logspath = logrootpath .. "/record",
+		splitfilesize = 40960,
 	},
 }
 
