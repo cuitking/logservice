@@ -9,6 +9,9 @@ common={
 		roomtablecfg = {
 			file="../config/business/roomtablecfg.lua",
 		},
+		mailcfg = {
+			file="../config/business/mailcfg",
+		},
 	}
 }
 

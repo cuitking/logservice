@@ -8,6 +8,7 @@ local gamelog = require "gamelog"
 local processstate = require "processstate"
 local playerdatadao = require "playerdatadao"
 local base = require "base"
+local msgproxy = require "msgproxy"
 local table = table
 require "enum"
 local processing = processstate:new({timeout = 5})
@@ -172,6 +173,16 @@ function  EnterGame.process(session, source, fd, request)
 	playerdatadao.save_player_online("update", request.rid, server.online)
 
 	msghelper:send_resmsgto_client(fd, "EnterGameRes", responsemsg)
+
+	local loginInfo = {
+		rid = server.rid,
+		activetime = server.online.activetime,
+		gatesvr_ip = server.online.gatesvr_ip,
+		gatesvr_port = gatesvr.svr_port,
+		gatesvr_id = skynet.getenv("svr_id"),
+		gatesvr_service_address = server.online.gatesvr_service_address
+	}
+	msgproxy.sendrpc_noticemsgto_logsvrd("addlogtologsvr","record",loginInfo)
 end
 
 return EnterGame

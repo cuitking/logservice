@@ -532,11 +532,11 @@ end
 
 
 function PlayerdataDAO.save_player_mail(cmd, rid, mail, condition)
-	if cmd == nil or rid == nil or mail == nil then
+	if cmd == nil or rid == nil or (mail == nil and cmd ~= "delete") then
 		filelog.sys_error("PlayerdataDAO.save_player_mail invalid params")
 		return
 	end
-	if type(mail.content) == "table" then
+	if mail and type(mail.content) == "table" then
 		mail.content = json.encode(mail.content)
 	end
 

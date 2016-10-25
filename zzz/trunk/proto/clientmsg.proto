@@ -415,6 +415,84 @@ message GameReadyRes {
 	optional string errcodedes = 2; //错误描述
 }
 
+//请求玩家战绩信息
+message PlayerGameRecordinfoReq {
+	optional Version version = 1;
+	optional int32 rid = 2;
+}
+
+//每个玩家在朋友桌存在期间的记录
+message playerRecordinfo {
+	optional int32 rid = 1;
+	optional int32 currencyid = 2; //货币id，金币为1
+	optional int32 balancenum = 3; //输赢的数量，+为赢，-为输
+	optional string rolename = 4; // 玩家名字
+}
+message PlayerGameRecordinfo {
+	optional int32 table_id = 1; //桌子id
+	optional int32 table_create_time = 2; //桌子创建时间
+	optional int32 tablecreater_rid = 3; //桌子创建者的rid
+	optional int32 entercosts = 4; // 报名费
+	repeated playerRecordinfo recordinfos = 5;
+}
+
+//响应玩家战绩信息
+message PlayerGameRecordinfoRes {
+	optional int32 errcode = 1; //错误原因 0表示成功
+	optional string errcodedes = 2; //错误描述
+	repeated PlayerGameRecordinfo records = 3; // 
+}
+
+//请求玩家的邮件信息
+message GetMailsReq {
+	optional Version version = 1;
+	optional int32 create_time = 2;
+}
+
+
+message MailItem {
+	optional string mail_key = 1;
+	optional int32 	rid = 2;
+	optional int32  create_time = 3;
+	optional string content = 4;
+	optional int32  isattach = 5;
+}
+
+//响应玩家的邮件信息
+message GetMailsRes {
+	optional int32 errcode = 1; //错误原因 0表示成功
+	optional string errcodedes = 2; // 错误描述 
+	repeated MailItem mailitems = 3; // 玩家邮件列表
+}
+
+//玩家请求领取邮件附件
+message GetmailItemsReq {
+	optional Version version = 1;
+	optional string mail_key = 2;
+}
+
+//响应玩家请求领取邮件附件
+message GetmailItemsRes {
+	optional int32 errcode = 1; //错误原因 0表示成功
+	optional string errcodedes = 2; // 错误描述 
+	optional string mail_key = 3; //
+	optional string resultdes = 4; // 得到物品的json串
+}
+
+// 玩家请求删除邮件
+message DeleteMailReq {
+	optional Version version = 1;
+	optional string mail_key = 2;
+}
+
+// 响应玩家请求删除邮件
+message DeleteMailRes {
+	optional int32 errcode = 1; //错误原因 0表示成功
+	optional string errcodedes = 2; // 错误描述 
+	optional string mail_key = 3; //
+}
+
+
 ////////////////////notice/////////////////////
 //通知在其他设备上登陆
 message RepeatNtc {
@@ -520,81 +598,10 @@ message ReenterTableNtc {
 	optional int32 action_seat_index = 6;
 }
 
-//请求玩家战绩信息
-message PlayerGameRecordinfoReq {
-	optional Version version = 1;
-	optional int32 rid = 2;
-}
-
-//每个玩家在朋友桌存在期间的记录
-message playerRecordinfo {
-	optional int32 rid = 1;
-	optional int32 currencyid = 2; //货币id，金币为1
-	optional int32 balancenum = 3; //输赢的数量，+为赢，-为输
-	optional string rolename = 4; // 玩家名字
-}
-message PlayerGameRecordinfo {
-	optional int32 table_id = 1; //桌子id
-	optional int32 table_create_time = 2; //桌子创建时间
-	optional int32 tablecreater_rid = 3; //桌子创建者的rid
-	optional int32 entercosts = 4; // 报名费
-	repeated playerRecordinfo recordinfos = 5;
-}
-
-//响应玩家战绩信息
-message PlayerGameRecordinfoRes {
-	optional int32 errcode = 1; //错误原因 0表示成功
-	optional string errcodedes = 2; //错误描述
-	repeated PlayerGameRecordinfo records = 3; // 
-}
-
-//请求玩家的邮件信息
-message GetMailsReq {
-	optional Version version = 1;
-	optional int32 create_time = 2;
-}
-
-
-message MailItem {
-	optional string mail_key = 1;
-	optional int32 	rid = 2;
-	optional int32  create_time = 3;
-	optional string content = 4;
-	optional int32  isattach = 5;
-}
-
-//响应玩家的邮件信息
-message GetMailsRes {
-	optional int32 errcode = 1; //错误原因 0表示成功
-	optional string errcodedes = 2; // 错误描述 
-	repeated MailItem mailitems = 3; // 玩家邮件列表
-}
-
-//玩家请求领取邮件附件
-message GetmailItemsReq {
-	optional Version version = 1;
-	optional string mail_key = 2;
-}
-
-//响应玩家请求领取邮件附件
-message GetmailItemsRes {
-	optional int32 errcode = 1; //错误原因 0表示成功
-	optional string errcodedes = 2; // 错误描述 
-	optional string mail_key = 3; //
-	optional string resultdes = 4; // 得到物品的json串
-}
-
-// 玩家请求删除邮件
-message DeleteMailReq {
-	optional Version version = 1;
-	optional string mail_key = 2;
-}
-
-// 响应玩家请求删除邮件
-message DeleteMailRes {
-	optional int32 errcode = 1; //错误原因 0表示成功
-	optional string errcodedes = 2; // 错误描述 
-	optional string mail_key = 3; //
+//更新玩家货币信息
+message CurrencyinfoNtc {
+	optional int32 coins = 1;
+	optional int32 diamonds = 2;
 }
 
 

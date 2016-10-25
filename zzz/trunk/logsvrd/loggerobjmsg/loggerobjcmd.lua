@@ -1,10 +1,3 @@
---
--- Created by IntelliJ IDEA.
--- User: juzhong
--- Date: 2016/10/11
--- Time: 17:54
--- To change this template use File | Settings | File Templates.
---
 local skynet = require "skynet"
 local filelog = require "filelog"
 local msghelper = require "loggerobjhelper"
@@ -23,9 +16,18 @@ function LoggerobjCmd.process(session, source, event, ...)
 end
 
 function LoggerobjCmd.start(conf,svr_id)
-	filelog.sys_error("-----------LoggerobjCmd.start-------------",conf,svr_id)
-    
     loggerlogic.init(conf,svr_id)
+	base.skynet_retpack(true)
+end
+
+function LoggerobjCmd.addlog(message)
+	-- body
+	local server = msghelper:get_server()
+	if server.loggerbuffers == nil then
+		server.loggerbuffers = {}
+	end
+	table.insert(server.loggerbuffers,message)
+	filelog.sys_error("-----------LoggerobjCmd.addlog ---------")
 	base.skynet_retpack(true)
 end
 

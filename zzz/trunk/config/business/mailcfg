@@ -10,6 +10,20 @@ newplayermail = {
 	}
 }
 
+testplayermail = {
+	mail_key = "", ---调用时填充uuid
+	rid = 0, ---调用时填充rid
+	create_time = 0, --调用时填充创建时间
+	isattach = 1,
+	content = {
+		isattach = true,
+		des = "这是一个测试附件邮件！！！新玩家登录才会收到",
+		awards = {
+			{	id = 1, num = 20000},
+		}
+	}
+}
+
 maillimitconf = {
 	limitnum = 10,---显示邮件数量的限制
 	limittime = 10*24*60*60, ----

@@ -7,6 +7,7 @@ local filelog = require "filelog"
 local msgproxy = require "msgproxy"
 local base = require "base"
 local playerdatadao = require "playerdatadao"
+local configdao = require "configdao"
 require "enum"
 local RoomTableLogic = {}
 
@@ -257,6 +258,15 @@ function RoomTableLogic.sitdowntable(tableobj, request, seat)
     end
 	msghelper:report_table_state()
 
+	----插入测试邮件
+	local mailconf = configdao.get_business_conf(100, 1000, "mailcfg")
+   	local testplayermail = tabletool.deepcopy(mailconf.testplayermail)
+   	---填充
+   	testplayermail.mail_key = base.generate_uuid()
+   	testplayermail.rid = seat.rid
+   	testplayermail.create_time = timetool.get_time()
+   	filelog.sys_error("---------insert--testplayermail------",testplayermail)
+   	playerdatadao.save_player_mail("insert",seat.rid,testplayermail,nil)
 end
 
 function RoomTableLogic.passive_standuptable(tableobj, request, seat, reason)
@@ -598,14 +608,7 @@ function RoomTableLogic.resetTable(tableobj)
 	tableobj.noputsCardsNum = 0		---一个出牌回合里,没有出牌的玩家数,不出+1，出牌则置0
 	tableobj.iswilldelete = 0 	---在游戏中如果收到删除指令,则置1,游戏结束再处理
 	tableobj.nojdznums = 0
-	---踢出还在托管状态的玩家
---	local roomtablelogic = logicmng.get_logicbyname("roomtablelogic")
---	for k,v in ipairs(tableobj.seats) do
---		if v.is_tuoguan == 1 then
---			roomtablelogic.passive_standuptable(tableobj, nil, v, EStandupReason.STANDUP_REASON_READYTIMEOUT_STANDUP)
---		end
---	end
-	---RoomTableLogic.saveGamerecords(tableobj)
+	tableobj.ischuntian = 0
 end
 
 function RoomTableLogic.isQiangdz(tableobj)

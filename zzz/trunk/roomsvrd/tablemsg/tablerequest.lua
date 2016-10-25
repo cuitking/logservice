@@ -468,6 +468,7 @@ function TableRequest.doaction(request)
 					return
 				end
 			end
+			table_data.ischuntian=0
 		end
 		----从玩家手牌上删除
 		for k,v in ipairs(request.cards) do

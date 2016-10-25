@@ -6,12 +6,16 @@ logscfg = {
 		logsname = "money",
 		logspath = logrootpath .. "/money",
 		splitfilesize = 40960,
+		begin_id = 100000,
+		num = 5,
 	},
 	
 	recordlogcfg = {
 		logsname = "record",
 		logspath = logrootpath .. "/record",
 		splitfilesize = 40960,
+		begin_id = 110000,
+		num = 5,
 	},
 }
 
