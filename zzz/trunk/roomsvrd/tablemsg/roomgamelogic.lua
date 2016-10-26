@@ -5,6 +5,7 @@ local timer = require "timer"
 local filelog = require "filelog"
 local logicmng = require "logicmng"
 local ddzgamelogic = require "ddzgamelogic"
+local gamelog = require "gamelog"
 require "enum"
 local RoomGameLogic = {}
 --[[
@@ -443,6 +444,8 @@ function RoomGameLogic.onegameend(gameobj)
 		GameEndResultNtcmsg.playerinfos = {}
 		msghelper:copy_playerinfoingameend(GameEndResultNtcmsg.playerinfos)
 		msghelper:sendmsg_to_alltableplayer("GameEndResultNtc", GameEndResultNtcmsg)
+		gamelog.write_table_records(tableobj.conf.id,tableobj.conf.room_type,tableobj.conf.base_coin,tableobj.baseTimes,
+			tableobj.conf.create_user_rid,GameEndResultNtcmsg.playerinfos)
 	end
 	local gameendmsg = {
 

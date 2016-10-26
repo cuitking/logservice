@@ -184,7 +184,8 @@ ECurrencyType = {
 ---货币变化的原因
 EReasonChangeCurrency = {
 	CHANGE_CURRENCY_UNKNOWN = 0,
-	CHANGE_CURRENCY_NORMAL_GAME = 1,
+	CHANGE_CURRENCY_SYSTEM_GAME = "系统桌结算",
+	CHANGE_CURRENCY_FRIEND_TABLE = "朋友桌结算",
 }
 
 ---倍数配置

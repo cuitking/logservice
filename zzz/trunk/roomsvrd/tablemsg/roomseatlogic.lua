@@ -185,9 +185,15 @@ function RoomSeatLogic.canceltuoguan(gameobj,seat)
 	end
 end
 
-function RoomSeatLogic.balancegame(seat,getvalue)
+function RoomSeatLogic.balancegame(seat,getvalue,isfriendtable)
+	local reason = ""
+	if isfriendtable == 1 then
+		 reason = reason .. EReasonChangeCurrency.CHANGE_CURRENCY_FRIEND_TABLE
+	else
+		 reason = reason .. EReasonChangeCurrency.CHANGE_CURRENCY_SYSTEM_GAME
+	end
 	msgproxy.sendrpc_noticemsgto_gatesvrd(seat.gatesvr_id,seat.agent_address, "updatecurrency",
-		seat.rid,ECurrencyType.CURRENCY_TYPE_COIN,getvalue,EReasonChangeCurrency.CHANGE_CURRENCY_NORMAL_GAME)
+		seat.rid,ECurrencyType.CURRENCY_TYPE_COIN,getvalue,reason)
 	msgproxy.sendrpc_noticemsgto_gatesvrd(seat.gatesvr_id,seat.agent_address, "updategameinfo",seat.rid,seat.win,seat.isdz,1,reason)
 end
 

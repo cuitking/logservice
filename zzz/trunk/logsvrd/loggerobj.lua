@@ -11,6 +11,7 @@ local loggerobj = serverbase:new({
     loggerpath = "",
     loggerbuffers = {},
     loggerconf = nil,
+    loggertestIndex = 100,
 })
 
 

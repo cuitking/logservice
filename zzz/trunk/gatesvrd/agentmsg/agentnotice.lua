@@ -2,6 +2,7 @@ local filelog = require "filelog"
 local msghelper = require "agenthelper"
 local base = require "base"
 local playerdatadao = require "playerdatadao"
+local gamelog = require "gamelog"
 require "enum"
 
 local AgentNotice = {}
@@ -113,23 +114,30 @@ function AgentNotice.updatecurrency(rid,currencyid,number,reason)
 	if not (currencyid >= ECurrencyType.CURRENCY_TYPE_COIN and currencyid <= ECurrencyType.CURRENCY_TYPE_DIAMOND) then
 		return
 	end
+	local beforetotal = 0
+	local aftertotal = 0
 	if currencyid == ECurrencyType.CURRENCY_TYPE_COIN then
+		beforetotal = server.money.coin
 		if server.money.coin + number >= 0 then
 			server.money.coin = server.money.coin + number
 		else
 			server.money.coin = 0
 		end
+		aftertotal = server.money.coin
 	elseif currencyid == ECurrencyType.CURRENCY_TYPE_DIAMOND then
+		beforetotal = server.money.diamond
 		if server.money.diamond + number >= 0 then
 			server.money.diamond = server.money.coin + number
 		else
 			server.money.diamond = 0
 		end
+		aftertotal = server.money.diamond
 	end
 	if server.money.coin > server.playgame.maxcoinnum then
 		server.playgame.maxcoinnum = server.money.coin
 	end
 	playerdatadao.save_player_money("update",rid,server.money)
+	gamelog.write_player_moneylog(rid, reason, currencyid, number, beforetotal, aftertotal)
 end
 
 return AgentNotice

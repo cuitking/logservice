@@ -2,20 +2,33 @@
 
 logrootpath ="../../../logs"
 logscfg = {
-	moneylogcfg = {
-		logsname = "money",
-		logspath = logrootpath .. "/money",
-		splitfilesize = 40960,
-		begin_id = 100000,
-		num = 5,
+	moneylogscfg = {
+		logsname = "moneylog", --日志类别
+		logspath = logrootpath .. "/moneylog", --日志类别对应的路径
+		splitfilesize = 250*4096,--每个日志切分的大小 单位为字节
+		begin_id = 100000, --该类日志的起始id，各类之间不能重叠
+		num = 3, ---用于写该类日志的服务数量
 	},
-	
-	recordlogcfg = {
-		logsname = "record",
-		logspath = logrootpath .. "/record",
-		splitfilesize = 40960,
+	rechargescfg = {
+		logsname = "rechargelog",
+		logspath = logrootpath .. "/rechargelog",
+		splitfilesize = 250*4096,
 		begin_id = 110000,
-		num = 5,
+		num = 1,
+	},
+	loginscfg = {
+		logsname = "loginlog",
+		logspath = logrootpath .. "/loginlog",
+		splitfilesize = 250*4096,
+		begin_id = 120000,
+		num = 1,
+	},
+	recordlogcfg = {
+		logsname = "recordlog",
+		logspath = logrootpath .. "/recordlog",
+		splitfilesize = 250*4096,
+		begin_id = 130000,
+		num = 1,
 	},
 }
 

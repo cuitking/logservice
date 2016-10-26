@@ -3,6 +3,7 @@ local msghelper = require "tablehelper"
 local timetool = require "timetool"
 local timer = require "timer"
 local filelog = require "filelog"
+local gamelog = require "gamelog"
 local logicmng = require "logicmng"
 local ddzgamelogic = require "ddzgamelogic"
 require "enum"
@@ -304,7 +305,6 @@ function RoomGameLogic.continue(gameobj)
 			seat.jdztag = 2 ----表示当前玩家已经抢过地主了
 			tableobj.noputsCardsNum = 0
 			tableobj.baseTimes = tableobj.baseTimes * 2
-			local roomtablelogic = logicmng.get_logicbyname("roomtablelogic")
 			roomtablelogic.sendHandsInfo(tableobj)
 			---判断下一家是否抢过,如果抢过则,强地主规则结束
 			if tableobj.seats[next_action_index].jdztag == 2 then
@@ -360,6 +360,9 @@ function RoomGameLogic.continue(gameobj)
 		action_type = tableobj.action_type,
 		action_to_time = tableobj.action_to_time,
 	}
+	if tableobj.action_type == EActionType.ACTION_TYPE_CHUPAI then
+		tableobj.ischuntian = 1
+	end
 	msghelper:sendmsg_to_alltableplayer("DoactionNtc", doactionntcmsg)
 	if tableobj.seats[tableobj.action_seat_index].is_tuoguan == EBOOL.TRUE then
 		tableobj.timer_id = timer.settimer(ETuoguanDelayTime.TUOGUAN_DELAY_TIME*100, "doaction", doactionntcmsg)
@@ -420,6 +423,8 @@ function RoomGameLogic.onegameend(gameobj)
 		GameEndResultNtcmsg.playerinfos = {}
 		msghelper:copy_playerinfoingameend(GameEndResultNtcmsg.playerinfos)
 		msghelper:sendmsg_to_alltableplayer("GameEndResultNtc", GameEndResultNtcmsg)
+		gamelog.write_table_records(tableobj.conf.id,tableobj.conf.room_type,tableobj.conf.base_coin,tableobj.baseTimes,
+			tableobj.conf.create_user_rid,GameEndResultNtcmsg.playerinfos)
 	end
 	local gameendmsg = {
 
@@ -452,6 +457,7 @@ function RoomGameLogic.onegamerealend(gameobj)
 			noticeDoReadymsg.rid =  v.rid
 			noticeDoReadymsg.roomsvr_seat_index = v.index
 			noticeDoReadymsg.ready_to_time = timetool.get_time() + tableobj.conf.ready_timeout
+			v.ready_to_time = timetool.get_time() + tableobj.conf.ready_timeout
 			msghelper:sendmsg_to_alltableplayer("DoReadyNtc",noticeDoReadymsg)
 			if v.ready_timer_id > 0 then
 				timer.cleartimer(v.ready_timer_id)
@@ -503,6 +509,7 @@ function RoomGameLogic.onegamestart_inittable(gameobj)
 	tableobj.noputsCardsNum = 0
 	tableobj.iswilldelete = 0
 	tableobj.nojdznums = 0
+	tableobj.ischuntian = 0
 	if tableobj.timer_id >= 0 then
 		timer.cleartimer(tableobj.timer_id)
 		tableobj.timer_id = -1

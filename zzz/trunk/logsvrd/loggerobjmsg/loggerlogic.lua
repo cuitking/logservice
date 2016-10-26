@@ -43,13 +43,17 @@ function loggerLogic.run()
     while #server.loggerbuffers > 0 do
         local messagetab = table.remove(server.loggerbuffers,1)
     	---local writestring = string.format("write=========%d", i)
-        server.loggerobj:info(messagetab,"foo","chinese")
-        local attr = lfs.attributes(server.loggerpath)
-        if attr.size > conf.splitfilesize then
-        	local randonum = base.RNG()
-            server.loggerpath = conf.logspath.."/"..string.format("%s-%s-%d.log",conf.logsname,os.date("%Y-%m-%d-%H:%M:%S"),randonum)
-            logger.loadCategory(conf.logsname,logger.new(file.new(server.loggerpath), conf.logsname, logger.INFO))
-            server.loggerobj = logger.getLogger(conf.logsname)
+        server.loggerobj:info(messagetab,conf.logsname,"chinese")
+        server.loggerIndex = server.loggerIndex + 1
+        if server.loggerIndex >= server.loggertestIndex then
+            server.loggerIndex = 0
+            local attr = lfs.attributes(server.loggerpath)
+            if attr.size > conf.splitfilesize then
+        	   local randonum = base.RNG()
+                server.loggerpath = conf.logspath.."/"..string.format("%s-%s-%d.log",conf.logsname,os.date("%Y-%m-%d-%H:%M:%S"),randonum)
+                logger.loadCategory(conf.logsname,logger.new(file.new(server.loggerpath), conf.logsname, logger.INFO))
+                server.loggerobj = logger.getLogger(conf.logsname)
+            end
         end
     end
 end

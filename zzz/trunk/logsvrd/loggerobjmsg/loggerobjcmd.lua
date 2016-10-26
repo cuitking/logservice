@@ -27,7 +27,6 @@ function LoggerobjCmd.addlog(message)
 		server.loggerbuffers = {}
 	end
 	table.insert(server.loggerbuffers,message)
-	filelog.sys_error("-----------LoggerobjCmd.addlog ---------")
 	base.skynet_retpack(true)
 end
 

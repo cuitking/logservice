@@ -35,7 +35,7 @@ _module.LOG_LEVELS = {
 
 -- Default pattern used for all appenders.
 _module.DEFAULT_PATTERN = "[%DATE] [%LEVEL] [%COUNTRY] %MESSAGE at %FILE:%LINE(%METHOD)\n"
-_module.DEFAULT_PATTERN = "[%DATE] [%LEVEL] %MESSAGE \n"
+_module.DEFAULT_PATTERN = "[%DATE] %MESSAGE \n"
 
 -- Name of the environment variable that holds the path to the default config file.
 local ENV_LOGGING_CONFIG_FILE = "LOG4LUA_CONFIG_FILE"

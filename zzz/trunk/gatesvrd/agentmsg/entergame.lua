@@ -86,9 +86,11 @@ function  EnterGame.process(session, source, fd, request)
 		return    	   		
    	end
    	local status
+   	local isreg = 0
    	status, server.info = playerdatadao.query_player_info(request.rid)
    	----新注册玩家发一封邮件
-   	---if status == true then
+   	if status == true then
+   		isreg = 1
    		local mailconf = configdao.get_business_conf(100, 1000, "mailcfg")
    		local newplayermail = tabletool.deepcopy(mailconf.newplayermail)
    		---填充
@@ -97,7 +99,7 @@ function  EnterGame.process(session, source, fd, request)
    		newplayermail.create_time = timetool.get_time()
    		filelog.sys_error("---------insert--newplayermail------",newplayermail)
    		playerdatadao.save_player_mail("insert",request.rid,newplayermail,nil)
-   	---end
+   	end
 	status, server.playgame = playerdatadao.query_player_playgame(request.rid)
 	status, server.online = playerdatadao.query_player_online(request.rid)
 	status, server.money = playerdatadao.query_player_money(request.rid)
@@ -157,6 +159,7 @@ function  EnterGame.process(session, source, fd, request)
 	responsemsg.baseinfo = {}
 	if server.money.coin > server.playgame.maxcoinnum then
 		server.playgame.maxcoinnum = server.money.coin
+		playerdatadao.save_player_playgame("update",server.rid,server.playgame)
 	end
 
 	msghelper:copy_base_info(responsemsg.baseinfo, server.info, server.playgame, server.money)
@@ -174,15 +177,8 @@ function  EnterGame.process(session, source, fd, request)
 
 	msghelper:send_resmsgto_client(fd, "EnterGameRes", responsemsg)
 
-	local loginInfo = {
-		rid = server.rid,
-		activetime = server.online.activetime,
-		gatesvr_ip = server.online.gatesvr_ip,
-		gatesvr_port = gatesvr.svr_port,
-		gatesvr_id = skynet.getenv("svr_id"),
-		gatesvr_service_address = server.online.gatesvr_service_address
-	}
-	msgproxy.sendrpc_noticemsgto_logsvrd("addlogtologsvr","record",loginInfo)
+	gamelog.write_player_loginlog(isreg, server.uid, server.rid, server.regfrom, server.platform, 
+		server.channel, server.authtype, server.version, timetool.get_time())
 end
 
 return EnterGame

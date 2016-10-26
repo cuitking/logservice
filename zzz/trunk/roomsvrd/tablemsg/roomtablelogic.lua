@@ -497,6 +497,10 @@ function RoomTableLogic.balancegame(tableobj)
 	end
 	local roomseatlogic = logicmng.get_logicbyname("roomseatlogic")
 	local basevalue = math.floor(tableobj.baseTimes * tableobj.conf.base_coin)
+	local isfriendtable = 0
+	if tableobj.conf.room_type == ERoomType.ROOM_TYPE_FRIEND_COMMON then
+		isfriendtable = 1
+	end
 	for k,value in ipairs(tableobj.seats) do
 		local getvalue = 0
 		if value.win == 0 then
@@ -517,7 +521,7 @@ function RoomTableLogic.balancegame(tableobj)
 		else
 			value.coin = 0
 		end
-		roomseatlogic.balancegame(value,getvalue)
+		roomseatlogic.balancegame(value,getvalue,isfriendtable)
 		if tableobj.conf.room_type==ERoomType.ROOM_TYPE_FRIEND_COMMON then
 			if tableobj.gamerecords == nil then RoomTableLogic.initGamerecords(tableobj) end
 			local onerecordmsg = {}
@@ -542,7 +546,6 @@ function RoomTableLogic.balancegame(tableobj)
 				end
 			end
 		end
-		---roomseatlogic.changeCurrency(value,ECurrencyType.CURRENCY_TYPE_COIN,getvalue,EReasonChangeCurrency.CHANGE_CURRENCY_NORMAL_GAME)
 	end
 end
 ----玩家出牌超时服务器处理为出一张最小的单牌
@@ -685,7 +688,6 @@ function RoomTableLogic.saveGamerecords(tableobj)
 				tablerecords.tablecreater_rid = tableobj.conf.create_user_rid
 				tablerecords.rid = value.rid
 				tablerecords.record = tabletool.deepcopy(tableobj.gamerecords)
-				---msgproxy.sendrpc_noticemsgto_gatesvrd()
 				filelog.sys_error("-------------saveGamerecords------------------",tablerecords)
 				playerdatadao.save_player_tablerecords("insert",value.rid,tablerecords)
 			end

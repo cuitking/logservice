@@ -69,13 +69,14 @@ create table if not exists role_tablerecords(
                                         )engine = InnoDB, charset = utf8;
 
 
-#统邮件表 insert delete
+#创建玩家邮件表 insert delete
 create table if not exists role_mailinfos(
                                             mail_key varchar(30) not null default "" comment '邮件key',
                                             rid int(11) not null comment '角色id',
                                             create_time int(11) not null DEFAULT '0' comment '创建时间',
                                             isattach int(11) not NULL DEFAULT '0' comment '是否有附件',
                                             content varchar(1024) not null DEFAULT '' comment '邮件内容json格式',
+                                            reason varchar(64) not null DEFAULT '' comment '发放邮件的原因',
                                             update_time timestamp on update current_timestamp default current_timestamp,
                                             primary key(mail_key)
                                         ) engine = InnoDB, charset = utf8;

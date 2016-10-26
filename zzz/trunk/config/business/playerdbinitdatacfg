@@ -51,4 +51,5 @@ mailinfos = {
 	create_time = 0,
 	isattach = 0,
 	content = "",
+	reason = "",
 }
